@@ -51,15 +51,26 @@ echo "" >> $F
 
 #cabecalho
 #00:30:00 | 02:45:16 | 02:15:16 | 02:13:03 | 01:43:03 | 01:02:13
-echo "+--------------------+------------+------------+---------+
-|DATA/HORA RECOLHA   |Time to SLA |Time to SLA |Diferença|
-|                    |(estimativa)| (real)     |         |
-+--------------------+------------+------------+---------+" >>$F
 
-echo "+--------------------+------------+------------+---------+
-|DATA/HORA RECOLHA   |Time to SLA |Time to SLA |Diferença|
-|                    |(estimativa)| (real)     |         |
-+--------------------+------------+------------+---------+"
+#echo "+--------------------+------------+------------+---------+" >>$F
+#echo "|DATA/HORA RECOLHA   |Time to SLA |Time to SLA |Diferença|" >>$F
+#echo "|                    |(estimativa)| (real)     |         |" >>$F
+#echo "+--------------------+------------+------------+---------+" >>$F
+
+printf "\n+--------------------+---------------+---------------+---------------+" >>$F
+printf "\n|DATA/HORA RECOLHA   |Time to SLA    |Time to SLA    |Diferença      |" >>$F
+printf "\n|                    |(estimativa)   | (real)        |               |" >>$F
+printf "\n+--------------------+---------------+---------------+---------------+" >>$F
+
+#echo "+--------------------+------------+------------+---------+
+#|DATA/HORA RECOLHA   |Time to SLA |Time to SLA |Diferença|
+#|                    |(estimativa)| (real)     |         |
+#+--------------------+------------+------------+---------+"
+
+printf "\n+--------------------+---------------+---------------+---------------+" 
+printf "\n|DATA/HORA RECOLHA   |Time to SLA    |Time to SLA    |Diferença      |" 
+printf "\n|                    |(estimativa)   | (real)        |               |" 
+printf "\n+--------------------+---------------+---------------+---------------+" 
 
 
 #echo "HORA REC            | T2P      | T2AO     | DIFEREN."
@@ -87,9 +98,14 @@ for meia in "${CADAMEIAHORA[@]}" ; do
 	DIFERENCA=$(mysql auditoria -u $user -p$password -se "select SUBTIME('$T2P', '$T2SLA')" |cut -f1)
 	
 	#display dos resultados
-	if [ ! -z "$PROJECAO" ] ; then
-		echo "|$hoje $meia | $T2P   | $T2SLA   | $DIFERENCA|" 
-		echo "|$hoje $meia | $T2P   | $T2SLA   | $DIFERENCA|" >> $F
+	if [[ ! $DIFERENCA == *"-"* ]] ; then
+		DIFERENCA="+$DIFERENCA"
+	fi
+	if [[ ! -z "$PROJECAO" ]] &&  ! [[ $T2P == *"-"* ]] ; then
+		#echo "|$hoje $meia | $T2P   | $T2SLA   | $DIFERENCA|" 
+		#echo "|$hoje $meia | $T2P   | $T2SLA   | $DIFERENCA|" >> $F
+		printf "\n|%s %s | %-13s | %-13s | %13s |" "$hoje" "$meia" "$T2P" "$T2SLA" "$DIFERENCA" 
+		printf "\n|%s %s | %-13s | %-13s | %13s |" "$hoje" "$meia" "$T2P" "$T2SLA" "$DIFERENCA" >> $F
 	fi
 done
 
@@ -100,11 +116,24 @@ done
 #UT2P=$(mysql auditoria -u $user -p$password -se "select SEC_TO_TIME( (TIME_TO_SEC('$UPROJECAO')) - (TIME_TO_SEC('$UH')) )" |cut -f1)
 #echo "$UH | $UT2P | -------- | --------"
 #echo "$UH | $UT2P | -------- | --------" >> $F
-echo "+--------------------+------------+------------+---------+" >> $F
-echo "|$hoje $AO ===> $ONLINE executado!            |" >> $F
-echo "+--------------------+------------+------------+---------+" >> $F
-echo "+--------------------+------------+------------+---------+"
-echo "|$hoje $AO ===> $ONLINE executado!            |"
-echo "+--------------------+------------+------------+---------+"
+
+#echo "+--------------------+------------+------------+---------+" >> $F
+#echo "|$hoje $AO ===> $ONLINE executado!            |" >> $F
+#echo "+--------------------+------------+------------+---------+" >> $F
+#echo "+--------------------+------------+------------+---------+"
+#echo "|$hoje $AO ===> $ONLINE executado!            |"
+#echo "+--------------------+------------+------------+---------+"
+
+printf "\n+--------------------+---------------+---------------+---------------+" >>$F
+printf "\n|%s %s ===> %s executado!                        |" $hoje $AO $ONLINE >> $F
+printf "\n+--------------------+---------------+---------------+---------------+" >>$F
+printf "\n" >>$F
+
+printf "\n+--------------------+---------------+---------------+---------------+" 
+printf "\n|%s %s ===> %s executado!                        |" $hoje $AO $ONLINE 
+printf "\n+--------------------+---------------+---------------+---------------+" 
+printf "\n" 
+
+
 #Iterar pelo ficheiro e montar um mail
 cat $F | mutt -s "$ONLINE - controles de estimativa" -- $enderecos
