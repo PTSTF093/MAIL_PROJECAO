@@ -82,8 +82,9 @@ for meia in "${CADAMEIAHORA[@]}" ; do
 	#calcular a diferenca de agora, pe 00:30 para a abertura previsa do online
 	#primeiro capturar a projeção para 00h30
 	#SELECT projecao FROM auditoria.projecao WHERE agora LIKE '2019-08-12 00:3%' ORDER BY agora ASC LIMIT 1 
-	frag_hora=${meia::4}
-	PROJECAO=$(mysql auditoria -u $user -p$password -se "SELECT projecao FROM auditoria.projecao WHERE agora LIKE '$hoje $frag_hora%' ORDER BY agora ASC LIMIT 1 " |cut -f1)
+	#frag_hora=${meia::4}
+	#PROJECAO=$(mysql auditoria -u $user -p$password -se "SELECT projecao FROM auditoria.projecao WHERE agora LIKE '$hoje $frag_hora%' ORDER BY agora ASC LIMIT 1 " |cut -f1)
+	PROJECAO=$(mysql auditoria -u $user -p$password -se "SELECT projecao FROM auditoria.projecao WHERE agora >= '$hoje $meia' ORDER BY agora ASC LIMIT 1 " |cut -f1)
 	T2P=$(mysql auditoria -u $user -p$password -se "select SEC_TO_TIME( (TIME_TO_SEC('$PROJECAO')) - (TIME_TO_SEC('$meia')) )" |cut -f1)
 	#echo "$meia T2P=$T2P"
 	
@@ -101,7 +102,7 @@ for meia in "${CADAMEIAHORA[@]}" ; do
 	if [[ ! $DIFERENCA == *"-"* ]] ; then
 		DIFERENCA="+$DIFERENCA"
 	fi
-	if [[ ! -z "$PROJECAO" ]] &&  ! [[ $T2P == *"-"* ]] ; then
+	if [[ ! -z "$PROJECAO" ]] && [[ ! $T2P == *"-"* ]] ; then
 		#echo "|$hoje $meia | $T2P   | $T2SLA   | $DIFERENCA|" 
 		#echo "|$hoje $meia | $T2P   | $T2SLA   | $DIFERENCA|" >> $F
 		printf "\n|%s %s | %-13s | %-13s | %13s |" "$hoje" "$meia" "$T2P" "$T2SLA" "$DIFERENCA" 
@@ -133,6 +134,29 @@ printf "\n+--------------------+---------------+---------------+---------------+
 printf "\n|%s %s ===> %s executado!                        |" $hoje $AO $ONLINE 
 printf "\n+--------------------+---------------+---------------+---------------+" 
 printf "\n" 
+
+
+printf "\n\n\n"
+printf "\n\n\n" >>$F
+
+#####################################
+#####################################
+#####################################
+###  Jobs que cancelaram no caminho do luxo crítico
+
+OUTPUT=$(mysql auditoria -u $user -p$password -N -t -e "select distinct(joberro) from auditoria.projecao_hotlist where instante like '$hoje %'")
+
+if [ ! -z "$OUTPUT" ] ; then
+	printf "JOBS que cancelaram no fluxo crítico:\n\n"
+	printf "JOBS que cancelaram no fluxo crítico:\n\n" >>$F
+	printf "%s\n" "$OUTPUT"
+	printf "%s\n" "$OUTPUT" >>$F
+#mysql auditoria -u $user -p$password -se "select distinct(joberro) from auditoria.projecao_hotlist where instante like '$hoje %'" >>$F
+fi
+
+
+
+
 
 
 #Iterar pelo ficheiro e montar um mail
