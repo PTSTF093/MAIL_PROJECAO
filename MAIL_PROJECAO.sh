@@ -19,7 +19,11 @@ declare -a CADAMEIAHORA=('00:15:00' '00:30:00' '00:45:00' '01:00:00' '01:15:00' 
 
 hoje=$(date +"%Y-%m-%d")
 #enderecos="ptstf093@pt.ibm.com,ptstf031@pt.ibm.com,ptstf026@pt.ibm.com"
-enderecos="ptstf093@pt.ibm.com,jose.gaspar@pt.ibm.com,ptstf026@pt.ibm.com,ptstf031@pt.ibm.com"
+#enderecos="ptstf093@pt.ibm.com,jose.gaspar@pt.ibm.com,ptstf026@pt.ibm.com,ptstf031@pt.ibm.com,mntope@pt.ibm.com"
+#enderecos="hmendonca@pt.ibm.com,jaime.dias@pt.ibm.com"
+enderecos="hmendonca@pt.ibm.com,jaime.dias@pt.ibm.com,ptstf093@pt.ibm.com,mntope@pt.ibm.com,pedro.fad@pt.ibm.com,jose.gaspar@pt.ibm.com,ptstf031@pt.ibm.com,ptstf026@pt.ibm.com"
+#CarbonCopy="ptstf093@pt.ibm.com -c mntope@pt.ibm.com -c pedro.fad@pt.ibm.com -c jose.gaspar@pt.ibm.com -c ptstf031@pt.ibm.com -c ptstf026@pt.ibm.com"
+#CarbonCopy="ptstf031@pt.ibm.com -c ptstf026@pt.ibm.com"
 #enderecos="ptstf093@pt.ibm.com,jose.gaspar@pt.ibm.com"
 #enderecos="ptstf093@pt.ibm.com"
 
@@ -32,7 +36,7 @@ ONLINE=$(mysql auditoria -u $user -p$password -se "SELECT online FROM auditoria.
 #echo "AO=$AO"
 
 #Limpar ficheiro de saída
-F="MAIL_PROJECAO.txt"
+F="MAIL_PROJECAO_$hoje.txt"
 echo > $F
 
 #Algum conteúdo para o mail
@@ -147,11 +151,15 @@ printf "\n\n\n" >>$F
 OUTPUT=$(mysql auditoria -u $user -p$password -N -t -e "select distinct(joberro) from auditoria.projecao_hotlist where instante like '$hoje %'")
 
 if [ ! -z "$OUTPUT" ] ; then
-	printf "JOBS que cancelaram no fluxo crítico:\n\n"
-	printf "JOBS que cancelaram no fluxo crítico:\n\n" >>$F
+#JOBS que cancelaram com impacto no fluxo crítico
+	printf "JOBS que cancelaram com impacto no fluxo crítico:\n\n"
+	printf "JOBS que cancelaram com impacto no fluxo crítico:\n\n" >>$F
 	printf "%s\n" "$OUTPUT"
 	printf "%s\n" "$OUTPUT" >>$F
 #mysql auditoria -u $user -p$password -se "select distinct(joberro) from auditoria.projecao_hotlist where instante like '$hoje %'" >>$F
+else
+	printf "Não foi detetado JOB cancelado com impacto no fluxo crítico\n\n"
+	printf "Não foi detetado JOB cancelado com impacto no fluxo crítico\n\n" >>$F
 fi
 
 
