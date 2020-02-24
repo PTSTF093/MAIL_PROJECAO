@@ -20,3 +20,7 @@ enderecos="ptstf093@pt.ibm.com,"
 #enderecos="ptstf093@pt.ibm.com,jose.gaspar@pt.ibm.com,vmmbastos@pt.ibm.com"
 
 echo "Bom dia, segue os ficheiros de log da projeção de hoje para PDBDDSNC"  | mutt -a LOG_PROJECAO_$hoje.tar.gz -s "$ONLINE - Logs dos controles de estimativa de hoje" -- $enderecos
+
+#Mover os ficheiros para ~/SYSLOGD_DIAG/ para não ficarem na folder HOME
+mv *$hoje*.txt ~/SYSLOGD_DIAG/
+
