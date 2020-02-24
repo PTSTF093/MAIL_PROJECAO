@@ -18,14 +18,17 @@ password="openpipes"
 declare -a CADAMEIAHORA=('00:15:00' '00:30:00' '00:45:00' '01:00:00' '01:15:00' '01:30:00' '01:45:00' '02:00:00' '02:15:00' '02:30:00' '02:45:00' '03:00:00' '03:15:00' '03:30:00' '03:45:00' '04:00:00' '04:15:00' '04:30:00' '04:45:00' '05:00:00' '05:15:00' '05:30:00' '05:45:00' '06:00:00' '06:15:00' '06:30:00' '06:45:00' '07:00:00' '07:15:00' '07:30:00' '07:45:00' '08:00:00')
 
 hoje=$(date +"%Y-%m-%d")
-#enderecos="ptstf093@pt.ibm.com,ptstf031@pt.ibm.com,ptstf026@pt.ibm.com"
-#enderecos="ptstf093@pt.ibm.com,jose.gaspar@pt.ibm.com,ptstf026@pt.ibm.com,ptstf031@pt.ibm.com,mntope@pt.ibm.com"
-#enderecos="hmendonca@pt.ibm.com,jaime.dias@pt.ibm.com"
-enderecos="hmendonca@pt.ibm.com,jaime.dias@pt.ibm.com,ptstf093@pt.ibm.com,mntope@pt.ibm.com,pedro.fad@pt.ibm.com,jose.gaspar@pt.ibm.com,ptstf031@pt.ibm.com,ptstf026@pt.ibm.com"
-#CarbonCopy="ptstf093@pt.ibm.com -c mntope@pt.ibm.com -c pedro.fad@pt.ibm.com -c jose.gaspar@pt.ibm.com -c ptstf031@pt.ibm.com -c ptstf026@pt.ibm.com"
-#CarbonCopy="ptstf031@pt.ibm.com -c ptstf026@pt.ibm.com"
-#enderecos="ptstf093@pt.ibm.com,jose.gaspar@pt.ibm.com"
 #enderecos="ptstf093@pt.ibm.com"
+#enderecos="MarlonSimoni@pt.ibm.com,jose.gaspar@pt.ibm.com,ptstf026@pt.ibm.com,ptstf031@pt.ibm.com,mntope@pt.ibm.com"
+#enderecos="hmendonca@pt.ibm.com,jaime.dias@pt.ibm.com"
+enderecos="hmendonca@pt.ibm.com,jaime.dias@pt.ibm.com,ptstf093@pt.ibm.com,mntope@pt.ibm.com,pedro.fad@pt.ibm.com,jose.gaspar@pt.ibm.com,ptstf031@pt.ibm.com,ptstf026@pt.ibm.com,vmmbastos@pt.ibm.com"
+
+#enderecos="vmmbastos@pt.ibm.com,MarlonSimoni@pt.ibm.com,mntope@pt.ibm.com,jose.gaspar@pt.ibm.com,ptstf031@pt.ibm.com,ptstf026@pt.ibm.com"
+
+#CarbonCopy="MarlonSimoni@pt.ibm.com -c mntope@pt.ibm.com -c pedro.fad@pt.ibm.com -c jose.gaspar@pt.ibm.com -c ptstf031@pt.ibm.com -c ptstf026@pt.ibm.com"
+#CarbonCopy="ptstf031@pt.ibm.com -c ptstf026@pt.ibm.com"
+#enderecos="MarlonSimoni@pt.ibm.com,jose.gaspar@pt.ibm.com"
+#enderecos="MarlonSimoni@pt.ibm.com"
 
 #AO=$(echo "SELECT projecao FROM auditoria.projecao order by agora asc limit 1" | mysql auditoria -u $user -p$password)
 #AO=$(mysql auditoria -u $user -p$password -se "SELECT projecao FROM auditoria.projecao order by agora desc limit 1"|cut -f1)
